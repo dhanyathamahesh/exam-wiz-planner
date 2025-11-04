@@ -1,4 +1,5 @@
 import { ArrowRight, BookOpen, Target, Zap } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import heroImage from "@/assets/hero-education.jpg";
 
@@ -29,13 +30,17 @@ export const Hero = () => {
           </p>
 
           <div className="flex flex-wrap gap-4">
-            <Button variant="hero" size="lg" className="group">
-              Start Learning
-              <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            <Button variant="hero" size="lg" className="group" asChild>
+              <Link to="/auth">
+                Start Learning
+                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </Button>
-            <Button variant="outline" size="lg">
-              <BookOpen className="h-5 w-5" />
-              Browse Resources
+            <Button variant="outline" size="lg" asChild>
+              <a href="#resources">
+                <BookOpen className="h-5 w-5" />
+                Browse Resources
+              </a>
             </Button>
           </div>
 

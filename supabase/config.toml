@@ -1,1 +1,7 @@
 project_id = "lganygptebgtzdrgnvfk"
+
+[functions.generate-study-plan]
+verify_jwt = true
+
+[functions.generate-quiz]
+verify_jwt = true

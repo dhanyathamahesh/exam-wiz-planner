@@ -1,4 +1,5 @@
 import { BookOpen, GraduationCap, Menu } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 
@@ -30,7 +31,9 @@ export const Navbar = () => {
               {link.label}
             </a>
           ))}
-          <Button variant="default" size="sm">Get Started</Button>
+          <Button variant="default" size="sm" asChild>
+            <Link to="/auth">Get Started</Link>
+          </Button>
         </div>
 
         <Sheet>
@@ -50,7 +53,9 @@ export const Navbar = () => {
                   {link.label}
                 </a>
               ))}
-              <Button variant="default" className="mt-4">Get Started</Button>
+              <Button variant="default" className="mt-4" asChild>
+                <Link to="/auth">Get Started</Link>
+              </Button>
             </div>
           </SheetContent>
         </Sheet>
