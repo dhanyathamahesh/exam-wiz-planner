@@ -425,7 +425,18 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_quiz_questions_safe: {
+        Args: { p_quiz_id: string }
+        Returns: {
+          correct_answer: string
+          created_at: string
+          explanation: string
+          id: string
+          options: Json
+          question_text: string
+          quiz_id: string
+        }[]
+      }
     }
     Enums: {
       difficulty_level: "easy" | "medium" | "hard"

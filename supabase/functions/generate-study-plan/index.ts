@@ -1,10 +1,23 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
+
+// Input validation schema
+const studyPlanRequestSchema = z.object({
+  grade: z.string().min(1, "Grade is required").max(20, "Grade too long"),
+  targetExam: z.string().min(1, "Target exam is required").max(50, "Target exam too long"),
+  startDate: z.string().datetime({ message: "Invalid start date format" }),
+  endDate: z.string().datetime({ message: "Invalid end date format" }),
+  weakSubjects: z.array(z.string().max(100, "Subject name too long")).max(10, "Maximum 10 weak subjects allowed")
+}).refine(data => new Date(data.endDate) > new Date(data.startDate), {
+  message: "End date must be after start date",
+  path: ["endDate"]
+});
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -12,7 +25,25 @@ serve(async (req) => {
   }
 
   try {
-    const { grade, targetExam, startDate, endDate, weakSubjects } = await req.json();
+    const requestBody = await req.json();
+    
+    // Validate input
+    const validationResult = studyPlanRequestSchema.safeParse(requestBody);
+    if (!validationResult.success) {
+      console.error('Validation error:', validationResult.error.errors);
+      return new Response(
+        JSON.stringify({ 
+          error: 'Invalid input', 
+          details: validationResult.error.errors.map((e: any) => `${e.path.join('.')}: ${e.message}`)
+        }), 
+        { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
+    const { grade, targetExam, startDate, endDate, weakSubjects } = validationResult.data;
     
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     if (!LOVABLE_API_KEY) {
