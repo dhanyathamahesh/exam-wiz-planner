@@ -165,11 +165,15 @@ const Dashboard = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid md:grid-cols-3 gap-4">
-                <Button variant="outline" className="h-auto p-6 flex flex-col items-start gap-2">
+                <Button 
+                  variant="outline" 
+                  className="h-auto p-6 flex flex-col items-start gap-2"
+                  onClick={() => navigate("/subjects")}
+                >
                   <BookOpen className="h-8 w-8 text-primary mb-2" />
-                  <h3 className="font-semibold">Browse Resources</h3>
+                  <h3 className="font-semibold">Browse Chapters</h3>
                   <p className="text-sm text-muted-foreground text-left">
-                    Explore curated videos, PDFs, and past papers
+                    Explore chapters with notes, videos, and practice
                   </p>
                 </Button>
                 <Button variant="outline" className="h-auto p-6 flex flex-col items-start gap-2">

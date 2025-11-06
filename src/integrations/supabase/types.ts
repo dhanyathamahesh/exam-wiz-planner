@@ -14,6 +14,101 @@ export type Database = {
   }
   public: {
     Tables: {
+      chapters: {
+        Row: {
+          chapter_number: number
+          created_at: string
+          curriculum_id: string | null
+          description: string | null
+          difficulty: string | null
+          estimated_time_minutes: number | null
+          id: string
+          keywords: string[] | null
+          subject_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          chapter_number: number
+          created_at?: string
+          curriculum_id?: string | null
+          description?: string | null
+          difficulty?: string | null
+          estimated_time_minutes?: number | null
+          id?: string
+          keywords?: string[] | null
+          subject_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          chapter_number?: number
+          created_at?: string
+          curriculum_id?: string | null
+          description?: string | null
+          difficulty?: string | null
+          estimated_time_minutes?: number | null
+          id?: string
+          keywords?: string[] | null
+          subject_id?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chapters_curriculum_id_fkey"
+            columns: ["curriculum_id"]
+            isOneToOne: false
+            referencedRelation: "curricula"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chapters_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      curricula: {
+        Row: {
+          board: string
+          created_at: string
+          grade: string
+          id: string
+          subject_id: string | null
+          syllabus_structure: Json | null
+          updated_at: string
+        }
+        Insert: {
+          board: string
+          created_at?: string
+          grade: string
+          id?: string
+          subject_id?: string | null
+          syllabus_structure?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          board?: string
+          created_at?: string
+          grade?: string
+          id?: string
+          subject_id?: string | null
+          syllabus_structure?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "curricula_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exam_weightages: {
         Row: {
           created_at: string
@@ -204,6 +299,7 @@ export type Database = {
       }
       resources: {
         Row: {
+          chapter_id: string | null
           created_at: string
           description: string | null
           difficulty: Database["public"]["Enums"]["difficulty_level"]
@@ -211,14 +307,17 @@ export type Database = {
           exam_types: Database["public"]["Enums"]["exam_type"][]
           grade: string
           id: string
-          subject_id: string | null
+          license_info: string | null
+          resource_type: string | null
           thumbnail_url: string | null
           title: string
           type: Database["public"]["Enums"]["resource_type"]
           updated_at: string
+          uploader_id: string | null
           url: string | null
         }
         Insert: {
+          chapter_id?: string | null
           created_at?: string
           description?: string | null
           difficulty: Database["public"]["Enums"]["difficulty_level"]
@@ -226,14 +325,17 @@ export type Database = {
           exam_types?: Database["public"]["Enums"]["exam_type"][]
           grade: string
           id?: string
-          subject_id?: string | null
+          license_info?: string | null
+          resource_type?: string | null
           thumbnail_url?: string | null
           title: string
           type: Database["public"]["Enums"]["resource_type"]
           updated_at?: string
+          uploader_id?: string | null
           url?: string | null
         }
         Update: {
+          chapter_id?: string | null
           created_at?: string
           description?: string | null
           difficulty?: Database["public"]["Enums"]["difficulty_level"]
@@ -241,19 +343,21 @@ export type Database = {
           exam_types?: Database["public"]["Enums"]["exam_type"][]
           grade?: string
           id?: string
-          subject_id?: string | null
+          license_info?: string | null
+          resource_type?: string | null
           thumbnail_url?: string | null
           title?: string
           type?: Database["public"]["Enums"]["resource_type"]
           updated_at?: string
+          uploader_id?: string | null
           url?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "resources_subject_id_fkey"
-            columns: ["subject_id"]
+            foreignKeyName: "resources_chapter_id_fkey"
+            columns: ["chapter_id"]
             isOneToOne: false
-            referencedRelation: "subjects"
+            referencedRelation: "chapters"
             referencedColumns: ["id"]
           },
         ]
@@ -384,38 +488,50 @@ export type Database = {
       }
       user_progress: {
         Row: {
+          chapter_id: string | null
           completed: boolean | null
           created_at: string
+          first_accessed_at: string | null
           id: string
           last_accessed_at: string | null
           progress_percentage: number | null
-          resource_id: string
+          status: string | null
+          streak_days: number | null
+          time_spent_minutes: number | null
           user_id: string
         }
         Insert: {
+          chapter_id?: string | null
           completed?: boolean | null
           created_at?: string
+          first_accessed_at?: string | null
           id?: string
           last_accessed_at?: string | null
           progress_percentage?: number | null
-          resource_id: string
+          status?: string | null
+          streak_days?: number | null
+          time_spent_minutes?: number | null
           user_id: string
         }
         Update: {
+          chapter_id?: string | null
           completed?: boolean | null
           created_at?: string
+          first_accessed_at?: string | null
           id?: string
           last_accessed_at?: string | null
           progress_percentage?: number | null
-          resource_id?: string
+          status?: string | null
+          streak_days?: number | null
+          time_spent_minutes?: number | null
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "user_progress_resource_id_fkey"
-            columns: ["resource_id"]
+            foreignKeyName: "user_progress_chapter_id_fkey"
+            columns: ["chapter_id"]
             isOneToOne: false
-            referencedRelation: "resources"
+            referencedRelation: "chapters"
             referencedColumns: ["id"]
           },
         ]
